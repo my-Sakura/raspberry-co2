@@ -5,18 +5,19 @@ import (
 
 	"github.com/tarm/serial"
 
-	"github.com/abserari/jx-co2-101-sensor/util/log"
+	"github.com/dovics/raspberry-co2/util/log"
 )
 
-var ActiveModeChange = []byte{0xff, 0x05, 0x03, 0x01, 0x00, 0x00, 0x00, 0x00, 0xf8}
-var QueryModeChange = []byte{0xff, 0x05, 0x03, 0x02, 0x00, 0x00, 0x00, 0x00, 0xf7}
-var QueryPPM = []byte{0xff, 0x05, 0x03, 0x03, 0x01, 0x00, 0x00, 0x00, 0xf5}
-var Correct = []byte{0xff, 0x05, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0xf8}
-var MODBUS_RTU = []byte{0x05, 0x03, 0x00, 0x05, 0x00, 0x01, 0x94, 0x07}
+var ActiveModeChange = []byte{0xff, 0x01, 0x03, 0x01, 0x00, 0x00, 0x00, 0x00, 0xfc}
+var QueryModeChange = []byte{0xff, 0x01, 0x03, 0x02, 0x00, 0x00, 0x00, 0x00, 0xfb}
+var QueryPPM = []byte{0xff, 0x01, 0x03, 0x03, 0x01, 0x00, 0x00, 0x00, 0xf9}
+var Correct = []byte{0xff, 0x01, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0xfc}
+var MODBUS_RTU = []byte{0x01, 0x03, 0x00, 0x05, 0x00, 0x01, 0x94, 0x0B}
 
 type CO2Sensor struct {
-	*bufio.Reader
+	config *serial.Config
 	serial *serial.Port
+	buf    *bufio.Reader
 }
 
 func Connect(config *serial.Config) (*CO2Sensor, error) {
@@ -26,8 +27,9 @@ func Connect(config *serial.Config) (*CO2Sensor, error) {
 	}
 
 	return &CO2Sensor{
-		bufio.NewReader(s),
-		s,
+		config: config,
+		buf:    bufio.NewReader(s),
+		serial: s,
 	}, nil
 }
 
@@ -42,7 +44,7 @@ func (s *CO2Sensor) SendMODBUS_RTU() error {
 		log.Info("send MODBUS_RTU successful")
 	}
 
-	data, _, _ := s.ReadLine()
+	data, _, _ := s.buf.ReadLine()
 	log.Info(string(data))
 
 	return nil
@@ -59,7 +61,7 @@ func (s *CO2Sensor) SendCorrect() error {
 		log.Info("send Correct successful")
 	}
 
-	data, _, _ := s.ReadLine()
+	data, _, _ := s.buf.ReadLine()
 	log.Info(string(data))
 
 	return nil
@@ -157,5 +159,25 @@ func (s *CO2Sensor) SendQuery() error {
 		log.Info("send QueryPPM successful")
 	}
 
+	return nil
+}
+
+func (s *CO2Sensor) ReadLine() (string, error) {
+	buf, _, err := s.buf.ReadLine()
+	return string(buf), err
+}
+
+func CRC(b []byte, check byte) bool {
+	return check == b[0]-b[1]-b[2]-b[3]-b[4]-b[5]-b[6]-b[7]+2
+}
+
+func (s *CO2Sensor) Reconnect() error {
+	port, err := serial.OpenPort(s.config)
+	if err != nil {
+		return err
+	}
+
+	s.serial = port
+	s.buf = bufio.NewReader(port)
 	return nil
 }

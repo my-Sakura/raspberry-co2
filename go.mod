@@ -3,19 +3,17 @@ module github.com/dovics/raspberry-co2
 go 1.15
 
 require (
-	github.com/cweill/gotests v1.6.0 // indirect
-	github.com/fatih/gomodifytags v1.13.0 // indirect
 	github.com/gin-gonic/gin v1.6.3
-	github.com/go-sql-driver/mysql v1.4.0
-	github.com/golangci/golangci-lint v1.36.0 // indirect
-	github.com/haya14busa/goplay v1.0.0 // indirect
-	github.com/josharian/impl v1.0.0 // indirect
-	github.com/ramya-rao-a/go-outline v0.0.0-20200117021646-2a048b4510eb // indirect
-	github.com/sigurn/crc8 v0.0.0-20160107002456-e55481d6f45c
-	github.com/sigurn/utils v0.0.0-20190728110027-e1fefb11a144 // indirect
-	github.com/skratchdot/open-golang v0.0.0-20200116055534-eef842397966 // indirect
+	github.com/golang/protobuf v1.4.2 // indirect
+	github.com/google/go-cmp v0.5.4 // indirect
+	github.com/kr/text v0.2.0 // indirect
+	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
+	github.com/modern-go/reflect2 v1.0.1 // indirect
+	github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e // indirect
+	github.com/stretchr/testify v1.7.0 // indirect
 	github.com/tarm/serial v0.0.0-20180830185346-98f6abe2eb07
-	github.com/uudashr/gopkgs/v2 v2.1.2 // indirect
 	golang.org/x/sys v0.0.0-20210124154548-22da62e12c0c // indirect
-	golang.org/x/tools/gopls v0.6.5 // indirect
+	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
+	gopkg.in/check.v1 v1.0.0-20200227125254-8fa46927fb4f // indirect
+	gopkg.in/yaml.v2 v2.4.0 // indirect
 )

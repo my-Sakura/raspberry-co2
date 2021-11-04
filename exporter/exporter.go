@@ -33,13 +33,14 @@ func (e *defaultExporter) Run() error {
 			if err != nil {
 				c.Error(err)
 				c.JSON(http.StatusBadGateway, gin.H{"error": err})
+				return 
 			}
 
 			c.JSON(http.StatusOK, gin.H{"status": http.StatusOK, "data": data})
 		}
 	}
 
-	engine := gin.New()
+	engine := gin.Default()
 	for k, o := range e.operates {
 		engine.GET(k, handlerWrapper(o))
 	}

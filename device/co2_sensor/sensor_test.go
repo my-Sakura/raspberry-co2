@@ -9,7 +9,7 @@ import (
 
 // pi3 should open uart and communicate with device: /dev/ttyAMA0 | /dev/serial0
 func TestExample(t *testing.T) {
-	sensor, err := Connect(&serial.Config{Name: "/dev/ttyAMA0", Baud: 9600, ReadTimeout: time.Second * 5})
+	sensor, err := Connect(&serial.Config{Name: "COM1", Baud: 9600, ReadTimeout: time.Second * 5})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -23,7 +23,7 @@ func TestExample(t *testing.T) {
 	}()
 
 	for {
-		data, _, err := sensor.ReadLine()
+		data, err := sensor.ReadLine()
 		if err != nil {
 			t.Error(err)
 		}
@@ -31,4 +31,8 @@ func TestExample(t *testing.T) {
 		t.Log(data)
 	}
 
+}
+
+func TestCRC(t *testing.T) {
+	CRC(ActiveModeChange, 0xfc)
 }

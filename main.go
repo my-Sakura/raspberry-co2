@@ -3,16 +3,16 @@ package main
 import (
 	"time"
 
-	"github.com/abserari/jx-co2-101-sensor/exporter"
-	"github.com/abserari/jx-co2-101-sensor/operator"
-	"github.com/abserari/jx-co2-101-sensor/util/log"
+	"github.com/dovics/raspberry-co2/exporter"
+	"github.com/dovics/raspberry-co2/operator"
+	"github.com/dovics/raspberry-co2/util/log"
 
-	sensor "github.com/abserari/jx-co2-101-sensor/device/co2_sensor"
+	sensor "github.com/dovics/raspberry-co2/device/co2_sensor"
 	"github.com/tarm/serial"
 )
 
 func main() {
-	c := &serial.Config{Name: "/dev/ttyAMA0", Baud: 2400, ReadTimeout: time.Second * 5}
+	c := &serial.Config{Name: "/dev/serial0", Baud: 115200, ReadTimeout: time.Second * 5}
 	co2Sensor, err := sensor.Connect(c)
 	if err != nil {
 		log.Fatal(err)
