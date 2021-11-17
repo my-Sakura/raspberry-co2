@@ -1,10 +1,10 @@
 package operator
 
 import (
+	"errors"
 	"io"
 	"strconv"
 	"strings"
-	"errors"
 
 	sensor "github.com/dovics/raspberry-co2/device/co2_sensor"
 	"github.com/dovics/raspberry-co2/util/log"
@@ -14,7 +14,7 @@ type CO2Operator struct {
 	sensor *sensor.CO2Sensor
 }
 
-func NewOperator(sensor *sensor.CO2Sensor) *CO2Operator {
+func NewCO2Operator(sensor *sensor.CO2Sensor) *CO2Operator {
 	err := sensor.SendActiveModeChange()
 	if err != nil {
 		log.Info(err)
@@ -44,7 +44,7 @@ func (o *CO2Operator) QueryCO2() (int, error) {
 			}
 			retry--
 			log.Info(err)
-			continue;
+			continue
 		}
 
 		// bytes data            4444       ppm

@@ -1,7 +1,8 @@
-package sensor
+package co2_sensor
 
 import (
 	"bufio"
+	"time"
 
 	"github.com/tarm/serial"
 
@@ -20,7 +21,24 @@ type CO2Sensor struct {
 	buf    *bufio.Reader
 }
 
-func Connect(config *serial.Config) (*CO2Sensor, error) {
+type Config struct {
+	Name        string
+	Baud        int
+	ReadTimeout time.Duration
+	Size        byte
+	Parity      serial.Parity
+	StopBits    serial.StopBits
+}
+
+func Connect(c *Config) (*CO2Sensor, error) {
+	config := &serial.Config{
+		Name:        c.Name,
+		Baud:        c.Baud,
+		ReadTimeout: c.ReadTimeout,
+		Size:        c.Size,
+		Parity:      c.Parity,
+		StopBits:    c.StopBits,
+	}
 	s, err := serial.OpenPort(config)
 	if err != nil {
 		return nil, err
